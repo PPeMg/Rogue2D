@@ -5,8 +5,9 @@
 [Bb]uilds/
 [Ll]ogs/
 
-# Uncomment this line if you wish to ignore the asset store tools plugin
-# [Aa]ssets/AssetStoreTools*
+/Assets/AssetStoreTools*
+/Assets/_Complete-Game*
+/Assets/2D Roguelike Upgrade Guide 5x*
 
 # Visual Studio cache directory
 .vs/
