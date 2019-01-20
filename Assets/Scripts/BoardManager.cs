@@ -7,14 +7,63 @@ public class BoardManager : MonoBehaviour {
     public int columns = 8;
     public int rows = 8;
 
-    public GameObject[] floorTiles, outerWallTiles;
+    public GameObject[] floorTiles, outerWallTiles, wallTiles, foodTiles, enemys;
+    public GameObject exit;
 
-    private Transform boardHolder;
+    private Transform boardHolder, objectHolder;
+    private List<Vector2> gridPositions = new List<Vector2>();
 
-    public void SetupScene()
+    void InitializeList()
     {
-        Debug.Log("Soy SetupScene()");
+        gridPositions.Clear();
+        for (int x = 1; x < columns - 1; x++)
+        {
+            for (int y = 1; y < columns - 1; y++)
+            {
+                gridPositions.Add(new Vector2(x, y));
+            }
+        }
+    }
+
+    Vector2 RandomPosition()
+    {
+        int randomIndex = Random.Range(0, gridPositions.Count);
+        Vector2 randomPosition = gridPositions[randomIndex];
+        gridPositions.RemoveAt(randomIndex);
+
+        return randomPosition;
+    }
+
+    void LayoutObjectAtRandom(GameObject[] objectArray, int min, int max, Transform holder = null)
+    {
+        int objectCount = Random.Range(min, max + 1);
+
+        for(int i = 0; i < objectCount; i++)
+        {
+            Vector2 position = RandomPosition();
+            GameObject objectSelected = GetRandomInArray(objectArray);
+
+            GameObject instance = Instantiate(objectSelected, position, Quaternion.identity);
+
+            if(holder != null)
+            {
+                instance.transform.SetParent(holder);
+            }
+        }
+    }
+
+    public void SetupScene(int level)
+    {
+        objectHolder = new GameObject("Objects").transform;
+        Debug.Log("Seting Setup in Scene...");
         BoardSetup();
+        InitializeList();
+        LayoutObjectAtRandom(wallTiles, 5, 9, objectHolder);
+        LayoutObjectAtRandom(foodTiles, 1, 5, objectHolder);
+
+        int enemyCount = (int) Mathf.Log((float) level, 2f);
+        LayoutObjectAtRandom(enemys, enemyCount, enemyCount);
+        Debug.Log("Finished");
     }
 
     void BoardSetup()
