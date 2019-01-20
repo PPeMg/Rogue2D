@@ -146,7 +146,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -184,7 +184,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 153085842}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 3.5, y: 3.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -198,6 +198,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1388940726}
+  - component: {fileID: 1388940728}
+  - component: {fileID: 1388940727}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -218,3 +220,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1388940727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1388940725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f102eba38d4b36a418c776e438101836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 8
+  rows: 8
+  floorTiles:
+  - {fileID: 1102711552053098, guid: 2f095430b991dfb44a148c0062a76538, type: 2}
+  - {fileID: 1628876491731732, guid: 80af153089727374abfdc37331bea2f6, type: 2}
+  - {fileID: 1429072679384584, guid: efc139df27ef3b6488ee88ad4c65550c, type: 2}
+  - {fileID: 1524768861052016, guid: 6c1d83369c0b1994fab1b644a8c5abe6, type: 2}
+  - {fileID: 1783297398077234, guid: 176526c4484d11b489980872442de1d6, type: 2}
+  - {fileID: 1898543331976254, guid: 9c48b74826298a74181e49bb165c176a, type: 2}
+  - {fileID: 1068792072499064, guid: 330db75a10baf434580d82f477dd542e, type: 2}
+  - {fileID: 1399145874298494, guid: 81937d2148b40d249ba5c459773ca3f4, type: 2}
+  outerWallTiles:
+  - {fileID: 1623286086432490, guid: cf43cfaaac3f40b45b756d4ed954fdb3, type: 2}
+  - {fileID: 1002828741827508, guid: fa4035949a77a5841898e0065aeea0c6, type: 2}
+  - {fileID: 1736894789345638, guid: 8023c8837e170ae44b6fd281c85f6c83, type: 2}
+--- !u!114 &1388940728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1388940725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495e58e608428524884642740f46fa3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardScript: {fileID: 0}
