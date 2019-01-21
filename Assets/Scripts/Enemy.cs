@@ -12,15 +12,16 @@ public class Enemy : MovingObject {
 
     protected override void Awake()
     {
-        animator.GetComponent<Animator>();
         base.Awake();
+        animator = GetComponent<Animator>();
     }
 
     // Use this for initialization
     protected override void Start () {
-        base.Start();
+        GameManager.instance.AddEnemyToList(this);
         target = GameObject.FindGameObjectWithTag("Player").transform;
-	}
+        base.Start();
+    }
 
     protected override void AttempMove(int xDir, int yDir)
     {
@@ -32,16 +33,16 @@ public class Enemy : MovingObject {
         skipMove = !skipMove;
     }
 
-    public void Move()
+    public void TryMove()
     {
         int horizontal = 0, vertical = 0;
 
         if(Mathf.Abs(target.position.x - transform.position.x) > Mathf.Epsilon)
         {
-            vertical = (target.position.x > transform.position.x) ? 1 : -1;
+            horizontal = (target.position.x > transform.position.x) ? 1 : -1;
         } else
         {
-            horizontal = (target.position.y > transform.position.y) ? 1 : -1;
+            vertical = (target.position.y > transform.position.y) ? 1 : -1;
         }
 
         AttempMove(horizontal, vertical);

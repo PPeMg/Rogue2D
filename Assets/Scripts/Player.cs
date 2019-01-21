@@ -98,19 +98,16 @@ public class Player : MovingObject
     {
         if (other.CompareTag("Exit"))
         {
-            Debug.Log("Exit");
             Invoke("Restart", restartLevelDelay);
             enabled = false;
         }
         else if (other.CompareTag("Food"))
         {
-            Debug.Log("Food");
             food += pointsPerFood;
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Soda"))
         {
-            Debug.Log("Soda");
             food += pointsPerSoda;
             other.gameObject.SetActive(false);
         }
