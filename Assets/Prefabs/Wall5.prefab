@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4103426646810214}
   - component: {fileID: 212827364021759470}
   - component: {fileID: 65664990484187514}
+  - component: {fileID: 114913483727913602}
   m_Layer: 8
   m_Name: Wall5
   m_TagString: Untagged
@@ -53,6 +54,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114913483727913602
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1686940029148876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 972fafba0857a134e9f08f6edd3d6e43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagedSprite: {fileID: 21300104, guid: fbe1e7b94bb1a4a099d5bcb15a00141c, type: 3}
+  hp: 4
 --- !u!212 &212827364021759470
 SpriteRenderer:
   m_ObjectHideFlags: 1
