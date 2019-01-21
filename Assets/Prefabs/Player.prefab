@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 95330432235682332}
   - component: {fileID: 50403184565874734}
   - component: {fileID: 61001225380755748}
+  - component: {fileID: 114923507288232330}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -106,6 +107,25 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114923507288232330
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1965162876514058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bebcaa21482d1744db1d6f07d64b6691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveTime: 0.1
+  blockingLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  damagePower: 1
+  pointsPerFood: 10
+  pointsPerSoda: 20
+  restartLevelDelay: 1
 --- !u!212 &212134413952826670
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour {
     public static GameManager instance;
     public BoardManager boardScript;
     public int difficultyLevel = 0;
+    public int playerFoodPoints = 100;
+
+    [HideInInspector] public bool playersTurn = true;
 
     private void Awake()
     {
@@ -26,5 +29,10 @@ public class GameManager : MonoBehaviour {
     private void Start()
     {
         boardScript.SetupScene(difficultyLevel);
+    }
+
+    public void GameOver()
+    {
+        enabled = false;
     }
 }
