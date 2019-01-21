@@ -40,10 +40,12 @@ public class Player : MovingObject
 
     protected override void AttempMove(int xDir, int yDir)
     {
+        Debug.Log("Player Attempted to Move");
         food--;
         base.AttempMove(xDir, yDir);
         CheckIfGameOver();
         GameManager.instance.playersTurn = false;
+        Debug.Log("Player Finished Moving");
     }
 
     protected override void OnMovementFail(GameObject obstacle)
@@ -63,8 +65,11 @@ public class Player : MovingObject
         {
             int horizontal = (int)Input.GetAxisRaw("Horizontal");
             int vertical = (int)Input.GetAxisRaw("Vertical");
-
-            if((horizontal != 0) || (vertical != 0))
+            /*
+            Debug.Log("Horizontal: " + horizontal);
+            Debug.Log("Vertical: " + vertical);
+            */
+            if ((horizontal != 0) || (vertical != 0))
             {
                 // Block Diagonal Movement
                 if (horizontal != 0)
@@ -93,16 +98,19 @@ public class Player : MovingObject
     {
         if (other.CompareTag("Exit"))
         {
+            Debug.Log("Exit");
             Invoke("Restart", restartLevelDelay);
             enabled = false;
         }
         else if (other.CompareTag("Food"))
         {
+            Debug.Log("Food");
             food += pointsPerFood;
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Soda"))
         {
+            Debug.Log("Soda");
             food += pointsPerSoda;
             other.gameObject.SetActive(false);
         }

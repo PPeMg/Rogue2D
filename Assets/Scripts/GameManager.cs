@@ -9,7 +9,8 @@ public class GameManager : MonoBehaviour {
     public int difficultyLevel = 0;
     public int playerFoodPoints = 100;
 
-    [HideInInspector] public bool playersTurn = true;
+    public bool playersTurn = true;
+    //[HideInInspector] public bool playersTurn = true;
 
     private void Awake()
     {

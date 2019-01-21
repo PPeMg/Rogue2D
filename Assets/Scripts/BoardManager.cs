@@ -55,7 +55,6 @@ public class BoardManager : MonoBehaviour {
     public void SetupScene(int level)
     {
         objectHolder = new GameObject("Objects").transform;
-        Debug.Log("Seting Setup in Scene...");
         BoardSetup();
         InitializeList();
         LayoutObjectAtRandom(wallTiles, 5, 9, objectHolder);
@@ -63,7 +62,8 @@ public class BoardManager : MonoBehaviour {
 
         int enemyCount = (int) Mathf.Log((float) level, 2f);
         LayoutObjectAtRandom(enemys, enemyCount, enemyCount);
-        Debug.Log("Finished");
+        GameObject instance = Instantiate(exit, new Vector2(columns - 1, rows - 1), Quaternion.identity);
+        instance.transform.SetParent(objectHolder);
     }
 
     void BoardSetup()

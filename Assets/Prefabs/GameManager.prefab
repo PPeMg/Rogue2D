@@ -54,6 +54,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardScript: {fileID: 0}
   difficultyLevel: 25
+  playerFoodPoints: 100
+  playersTurn: 1
 --- !u!114 &114399109177627964
 MonoBehaviour:
   m_ObjectHideFlags: 1
