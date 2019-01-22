@@ -43,10 +43,17 @@ public class GameManager : MonoBehaviour {
     void InitGame()
     {
         doingSetup = true;
+
+#if !(UNITY_STANDALONE || UNITY_WEBGL)
+        Text restartButtonText = GameObject.Find("LevelText").GetComponent<Text>();
+        restartButtonText = "Touch me to Restart";
+#endif
+
         levelImage = GameObject.Find("LevelImage");
         restartButton = GameObject.Find("RestartButton");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
         levelText.text = "Day " + level;
+
         restartButton.SetActive(false);
         levelImage.SetActive(true);
 
