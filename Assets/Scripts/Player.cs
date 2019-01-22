@@ -27,6 +27,10 @@ public class Player : MovingObject
     private Animator animator;
     private int food;
 
+#if !(UNITY_STANDALONE || UNITY_WEBGL)
+    private Vector2 touchOrigin = - Vector2.one;
+#endif
+
     protected override void Awake()
     {
         animator = GetComponent<Animator>();
@@ -91,9 +95,39 @@ public class Player : MovingObject
     {
         if (GameManager.instance.playersTurn && !GameManager.instance.gameOver && !isMoving)
         {
-            int horizontal = (int)Input.GetAxisRaw("Horizontal");
-            int vertical = (int)Input.GetAxisRaw("Vertical");
+            int horizontal = 0;
+            int vertical = 0;
 
+#if UNITY_STANDALONE || UNITY_WEBGL
+            horizontal = (int)Input.GetAxisRaw("Horizontal");
+            vertical = (int)Input.GetAxisRaw("Vertical");
+#else
+            if (Input.touchCount > 0) {
+                Touch userTouch = Input.touches[0];
+
+                if(userTouch.phase == TouchPhase.Began)
+                {
+                    touchOrigin = userTouch.position;
+                } else if(userTouch.phase == TouchPhase.Ended && touchOrigin != -Vector2.one)
+                {
+                    Vector2 touchEnd = userTouch.position;
+                    float x = touchEnd.x - touchOrigin.x;
+                    float y = touchEnd.y - touchOrigin.y;
+
+                    if(x != 0 || y != 0)
+                    {
+                        if (Mathf.Abs(x) > Mathf.Abs(y))
+                        {
+                            horizontal = (int)Mathf.Sign(x);
+                        }
+                        else if (Mathf.Abs(x) < Mathf.Abs(y))
+                        {
+                            vertical = (int)Mathf.Sign(y);
+                        }
+                    }
+                }
+            };
+#endif
             if ((horizontal != 0) || (vertical != 0))
             {
                 // Block Diagonal Movement
@@ -109,9 +143,14 @@ public class Player : MovingObject
             }
         } else if (GameManager.instance.gameOver && Input.GetKeyDown(KeyCode.R))
         {
-            GameManager.instance.Restart();
-            NextLevel();
+            Invoke("StartNewGame", nextLevelDelay);
         }
+    }
+
+    public void StartNewGame()
+    {
+        GameManager.instance.Restart();
+        NextLevel();
     }
 
     public void LoseFood(int loss)
