@@ -9,8 +9,20 @@ public class Player : MovingObject
     public int damagePower = 1;
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
-    public float restartLevelDelay = 1f;
+    public float nextLevelDelay = 1f;
     public Text foodText;
+
+    [Header("Sounds")]
+    public AudioClip chopSound1;
+    public AudioClip chopSound2;
+    public AudioClip moveSound1;
+    public AudioClip moveSound2;
+    public AudioClip drinkSound1;
+    public AudioClip drinkSound2;
+    public AudioClip eatSound1;
+    public AudioClip eatSound2;
+    public AudioClip gameOverSound;
+
 
     private Animator animator;
     private int food;
@@ -40,6 +52,7 @@ public class Player : MovingObject
             food = 0;
             UpdateFoodText();
             foodText.enabled = false;
+            SoundManager.instance.PlaySingle(gameOverSound);
             GameManager.instance.GameOver();
         }
     }
@@ -50,14 +63,16 @@ public class Player : MovingObject
         foodText.GraphicUpdateComplete();
     }
 
-    protected override void AttempMove(int xDir, int yDir)
+    protected override bool AttempMove(int xDir, int yDir)
     {
-        Debug.Log("Player Attempted to Move");
         food--;
         UpdateFoodText();
-        base.AttempMove(xDir, yDir);
+        SoundManager.instance.RandomizeSFX(moveSound1, moveSound2);
+        bool canMove = base.AttempMove(xDir, yDir);
         CheckIfGameOver();
         GameManager.instance.playersTurn = false;
+
+        return canMove;
     }
 
     protected override void OnMovementFail(GameObject obstacle)
@@ -66,21 +81,19 @@ public class Player : MovingObject
 
         if(hitWall != null)
         {
-            hitWall.damageWall(damagePower);
+            hitWall.DamageWall(damagePower);
+            SoundManager.instance.RandomizeSFX(chopSound1, chopSound2);
             animator.SetTrigger("playerChop");
         }
     }
 
     private void Update()
     {
-        if (GameManager.instance.playersTurn && !GameManager.instance.doingSetup)
+        if (GameManager.instance.playersTurn && !GameManager.instance.gameOver && !isMoving)
         {
             int horizontal = (int)Input.GetAxisRaw("Horizontal");
             int vertical = (int)Input.GetAxisRaw("Vertical");
-            /*
-            Debug.Log("Horizontal: " + horizontal);
-            Debug.Log("Vertical: " + vertical);
-            */
+
             if ((horizontal != 0) || (vertical != 0))
             {
                 // Block Diagonal Movement
@@ -89,14 +102,16 @@ public class Player : MovingObject
                     vertical = 0;
                 }
 
-                AttempMove(horizontal, vertical);
+                if(AttempMove(horizontal, vertical))
+                {
+                    SoundManager.instance.RandomizeSFX(moveSound1, moveSound2);
+                }
             }
+        } else if (GameManager.instance.gameOver && Input.GetKeyDown(KeyCode.R))
+        {
+            GameManager.instance.Restart();
+            NextLevel();
         }
-    }
-
-    void Restart()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void LoseFood(int loss)
@@ -109,22 +124,29 @@ public class Player : MovingObject
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("TRIGGER");
         if (other.CompareTag("Exit"))
         {
-            Invoke("Restart", restartLevelDelay);
+            Invoke("NextLevel", nextLevelDelay);
             enabled = false;
         }
         else if (other.CompareTag("Food"))
         {
             food += pointsPerFood;
+            SoundManager.instance.RandomizeSFX(eatSound1, eatSound2);
             UpdateFoodText();
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Soda"))
         {
             food += pointsPerSoda;
+            SoundManager.instance.RandomizeSFX(drinkSound1, drinkSound2);
             other.gameObject.SetActive(false);
         }
+    }
+
+    public void NextLevel()
+    {
+        food = GameManager.instance.playerFoodPoints;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

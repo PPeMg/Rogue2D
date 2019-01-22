@@ -12,6 +12,8 @@ public abstract class MovingObject : MonoBehaviour
     private BoxCollider2D boxCollider;
     private Rigidbody2D rigidBody;
 
+    protected bool isMoving;
+
     protected virtual void Awake()
     {
         boxCollider = GetComponent<BoxCollider2D>();
@@ -25,15 +27,17 @@ public abstract class MovingObject : MonoBehaviour
 
     protected IEnumerator SmoothMovement(Vector2 end)
     {
+        isMoving = true;
         float remainingDinstance = Vector2.Distance(rigidBody.position, end);
 
-        while (remainingDinstance > float.Epsilon)
+        while (remainingDinstance > 0)
         {
             Vector2 newPosition = Vector2.MoveTowards(rigidBody.position, end, movementSpeed*Time.deltaTime);
             rigidBody.MovePosition(newPosition);
             remainingDinstance = Vector2.Distance(rigidBody.position, end);
             yield return null;
         }
+        isMoving = false;
     }
 
     protected bool Move(int xDir, int yDir, out RaycastHit2D hit)
@@ -59,7 +63,7 @@ public abstract class MovingObject : MonoBehaviour
 
     protected abstract void OnMovementFail(GameObject obstacle);
 
-    protected virtual void AttempMove(int xDir, int yDir)
+    protected virtual bool AttempMove(int xDir, int yDir)
     {
         RaycastHit2D hit;
         bool canMove = Move(xDir, yDir, out hit);
@@ -68,5 +72,7 @@ public abstract class MovingObject : MonoBehaviour
         {
             OnMovementFail(hit.transform.gameObject);
         }
+
+        return canMove;
     }
 }

@@ -6,6 +6,10 @@ public class Enemy : MovingObject {
 
     public int playerDamage;
 
+    [Header("Sounds")]
+    public AudioClip attackSound1;
+    public AudioClip attackSound2;
+
     private Animator animator;
     private Transform target;
     private bool skipMove;
@@ -23,14 +27,18 @@ public class Enemy : MovingObject {
         base.Start();
     }
 
-    protected override void AttempMove(int xDir, int yDir)
+    protected override bool AttempMove(int xDir, int yDir)
     {
+        bool canMove = false;
+
         if (!skipMove)
         {
-            base.AttempMove(xDir, yDir);
+            canMove = base.AttempMove(xDir, yDir);
         }
 
         skipMove = !skipMove;
+
+        return canMove;
     }
 
     public void TryMove()
@@ -47,8 +55,11 @@ public class Enemy : MovingObject {
                 vertical = (target.position.y > transform.position.y) ? 1 : -1;
             }
         }
-
-        AttempMove(horizontal, vertical);
+        
+        if(horizontal !=  0 || vertical != 0)
+        {
+            AttempMove(horizontal, vertical);
+        }
     }
 
     protected override void OnMovementFail(GameObject obstacle)
@@ -58,6 +69,7 @@ public class Enemy : MovingObject {
         if(hitPlayer != null)
         {
             hitPlayer.LoseFood(playerDamage);
+            SoundManager.instance.RandomizeSFX(attackSound1, attackSound2);
             animator.SetTrigger("enemyAttack");
         }
     }

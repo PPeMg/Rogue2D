@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
-
     public static GameManager instance;
     public float turnDelay = 0.1f;
     public float levelStartDelay = 2f;
@@ -14,14 +13,16 @@ public class GameManager : MonoBehaviour {
     public int level = 1;
     public int playerFoodPoints = 100;
     public bool doingSetup = false;
+    
 
     [HideInInspector] public bool playersTurn = true;
+    [HideInInspector] public bool gameOver = false;
 
     private List<Enemy> enemies;
     private bool enemiesMoving = false;
     private GameObject levelImage;
+    private GameObject restartButton;
     private Text levelText;
-
 
     private void Awake()
     {
@@ -43,9 +44,12 @@ public class GameManager : MonoBehaviour {
     {
         doingSetup = true;
         levelImage = GameObject.Find("LevelImage");
+        restartButton = GameObject.Find("RestartButton");
         levelText = GameObject.Find("LevelText").GetComponent<Text>();
         levelText.text = "Day " + level;
+        restartButton.SetActive(false);
         levelImage.SetActive(true);
+
 
         enemies.Clear();
         boardScript.SetupScene(level);
@@ -59,16 +63,23 @@ public class GameManager : MonoBehaviour {
         doingSetup = false;
     }
 
-    private void Start()
-    {
-        //InitGame();
-    }
-
     public void GameOver()
     {
         levelText.text = "You died after " + level + " days.";
         levelImage.SetActive(true);
-        enabled = false;
+        restartButton.SetActive(true);
+        //enabled = false;
+        gameOver = true;
+    }
+
+
+    public void Restart()
+    {
+        playerFoodPoints = 100;
+        level = 1;
+        gameOver = false;
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
     }
 
     IEnumerator MoveEnemies()
