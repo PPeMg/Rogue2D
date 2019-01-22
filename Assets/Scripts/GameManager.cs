@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
 
 #if !(UNITY_STANDALONE || UNITY_WEBGL)
         Text restartButtonText = GameObject.Find("LevelText").GetComponent<Text>();
-        restartButtonText = "Touch me to Restart";
+        restartButtonText.text = "Touch me to Restart";
 #endif
 
         levelImage = GameObject.Find("LevelImage");
