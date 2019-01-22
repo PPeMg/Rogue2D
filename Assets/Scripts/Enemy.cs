@@ -42,7 +42,10 @@ public class Enemy : MovingObject {
             horizontal = (target.position.x > transform.position.x) ? 1 : -1;
         } else
         {
-            vertical = (target.position.y > transform.position.y) ? 1 : -1;
+            if (Mathf.Abs(target.position.y - transform.position.y) > Mathf.Epsilon)
+            {
+                vertical = (target.position.y > transform.position.y) ? 1 : -1;
+            }
         }
 
         AttempMove(horizontal, vertical);

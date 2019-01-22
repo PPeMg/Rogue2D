@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MovingObject
 {
@@ -9,6 +10,7 @@ public class Player : MovingObject
     public int pointsPerFood = 10;
     public int pointsPerSoda = 20;
     public float restartLevelDelay = 1f;
+    public Text foodText;
 
     private Animator animator;
     private int food;
@@ -22,6 +24,7 @@ public class Player : MovingObject
     protected override void Start()
     {
         food = GameManager.instance.playerFoodPoints;
+        UpdateFoodText();
         base.Start();
     }
 
@@ -34,18 +37,27 @@ public class Player : MovingObject
     {
         if(food <= 0)
         {
+            food = 0;
+            UpdateFoodText();
+            foodText.enabled = false;
             GameManager.instance.GameOver();
         }
+    }
+
+    void UpdateFoodText()
+    {
+        foodText.text = "Food: " + food;
+        foodText.GraphicUpdateComplete();
     }
 
     protected override void AttempMove(int xDir, int yDir)
     {
         Debug.Log("Player Attempted to Move");
         food--;
+        UpdateFoodText();
         base.AttempMove(xDir, yDir);
         CheckIfGameOver();
         GameManager.instance.playersTurn = false;
-        Debug.Log("Player Finished Moving");
     }
 
     protected override void OnMovementFail(GameObject obstacle)
@@ -61,7 +73,7 @@ public class Player : MovingObject
 
     private void Update()
     {
-        if (GameManager.instance.playersTurn)
+        if (GameManager.instance.playersTurn && !GameManager.instance.doingSetup)
         {
             int horizontal = (int)Input.GetAxisRaw("Horizontal");
             int vertical = (int)Input.GetAxisRaw("Vertical");
@@ -90,12 +102,14 @@ public class Player : MovingObject
     public void LoseFood(int loss)
     {
         food -= loss;
+        UpdateFoodText();
         animator.SetTrigger("playerHit");
         CheckIfGameOver();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("TRIGGER");
         if (other.CompareTag("Exit"))
         {
             Invoke("Restart", restartLevelDelay);
@@ -104,6 +118,7 @@ public class Player : MovingObject
         else if (other.CompareTag("Food"))
         {
             food += pointsPerFood;
+            UpdateFoodText();
             other.gameObject.SetActive(false);
         }
         else if (other.CompareTag("Soda"))
